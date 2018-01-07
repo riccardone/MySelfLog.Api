@@ -10,6 +10,8 @@ config.eventstoreConnection = 'tcp://localhost:1113';
 config.eventstoreConnectionSettings = {};
 config.publishTo = "diary-input";
 
+config.elasticSearchLink = "http://localhost:9200";
+
 // logging
 config.logAppender = "debug";
 config.logLevel = "debug";

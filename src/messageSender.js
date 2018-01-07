@@ -9,10 +9,10 @@ function MessageSender(conn) {
     this._esConnection = conn;
 }
 
-MessageSender.prototype.send = function (message) {
+MessageSender.prototype.send = function (message, eventType) {
     var eventData = eventDataMapper.toEventData(message);
     var eventId = eventData.eventId;
-    var event = esClient.createJsonEventData(eventId, eventData.data, eventData.metadata, 'LogReceived');
+    var event = esClient.createJsonEventData(eventId, eventData.data, eventData.metadata, eventType);
     return this._esConnection.appendToStream(cfg.publishTo, esClient.expectedVersion.any, event);
 }
 
