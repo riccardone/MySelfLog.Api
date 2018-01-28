@@ -1,10 +1,10 @@
+require('dotenv').config()
 const express = require('express')
 var cfg = require('./config');
 var bodyParser = require('body-parser');
 var connectionFactory = require('./connectionFactory');
 var senderModule = require('./messageSender');
 var validation = require('./validation');
-var appParams = require('./appParameters');
 var eventDataMapper = require('./eventdata-mapper');
 var elasticRepositoryModule = require('./ElasticRepository');
 var elasticsearch = require('elasticsearch');
@@ -18,15 +18,9 @@ var logger = log4js.getLogger('app');
 const app = express();
 app.use(bodyParser.json());
 
-var appParamsInstance = new appParams(process.argv);
-var appPort = appParamsInstance.getPort(cfg.port);
 var connFactoryInstance = new connectionFactory();
 var conn = connFactoryInstance.CreateEsConnection();
 var sender = new senderModule(conn);
-var _client = new elasticsearch.Client({
-    host: cfg.elasticSearchLink,
-    log: 'trace'
-});
 
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -35,32 +29,20 @@ app.use(function (req, res, next) {
 });
 
 app.get('/', function (req, res) {
-    res.status(200).send('ok');
+    res.send('ok');
 });
 
-// app.get('/api/v1/diary/securitylink/:profile', function (req, res) {
-//     var id = eventDataMapper.getCorrelationId(req.params.profile);
-//     // Query elastic and get the securityLink    
-//     _client.get({
-//         index: "diary-events",
-//         type: "diaryEvent",
-//         id: id
-//     }).then(d => {
-//         res.send(d.text());
-//     }).catch(err => {
-//         if (!err.statusCode) {
-//             res.status(500).send('error');
-//         } else {
-//             res.status(err.statusCode).send('error');
-//         }
-//         logger.error(err);
-//     });
-// });
+function getElasticClient(){
+    return new elasticsearch.Client({
+        host: cfg.elasticSearchLink,
+        log: 'trace'
+    });
+}
 
 app.get('/api/v1/diary/check/:diaryName', function (req, res) {
     // Query elastic and check if this diaryName is already in use   
     var diaryName = req.params.diaryName;
-    _client.search({
+    getElasticClient().search({
         index: "diary-events",
         q: 'DiaryName:"' + diaryName + '"'
     }).then(d => {
@@ -82,7 +64,7 @@ app.get('/api/v1/diary/:profile', function (req, res) {
     var id = eventDataMapper.getCorrelationId(req.params.profile);
     // Query elastic and check if this diaryName is already in use   
     var diaryName = req.params.diaryName;
-    _client.get({
+    getElasticClient().get({
         index: "diary-events",
         type: "diaryEvent",
         id: id
@@ -109,7 +91,7 @@ app.post('/api/v1/logs', function (req, res) {
     }
     sender.send(req.body, 'LogReceived').then(function (result) {
         logger.debug("Event stored");
-        res.status(201).send(); // TODO redirect on the diary?
+        res.send(); // TODO redirect on the diary?
     }).catch(function (err) {
         logger.error(err);
         res.status(500).send('There is a technical problem and the log has not been stored');
@@ -125,14 +107,14 @@ app.post('/api/v1/diary', function (req, res) {
     // TODO change this nonsense event type and use a proper one
     sender.send(req.body, 'CreateDiary').then(function (result) {
         logger.debug("Event stored");
-        res.status(201).send(); // TODO redirect on the diary?
+        res.send(); // TODO redirect on the diary?
     }).catch(function (err) {
         logger.error(err);
         res.status(500).send('There is a technical problem and the log has not been stored');
     });
 })
 
-var server = app.listen(appPort, cfg.host, function () {
+var server = app.listen(cfg.port, cfg.host, function () {
     var address = server.address().address + ":" + server.address().port;
 
     logger.info("Running environment configuration: %s", cfg.env)

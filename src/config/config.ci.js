@@ -1,12 +1,12 @@
 var config = require('./config.default');
 
-config.env = 'ci';
-config.host = 'localhost';
-config.port = 3001;
+// config.env = 'ci';
+// config.host = 'localhost';
+// config.port = 3001;
 
-config.eventstoreConnection = 'notneeded-for-CI';
-config.eventstoreConnectionSettings = {};
-config.publishTo = "notneeded-for-CI";
+// config.eventstoreConnection = 'notneeded-for-CI';
+// config.eventstoreConnectionSettings = {};
+// config.publishTo = "notneeded-for-CI";
 
 // logging
 config.logAppender = "ci";

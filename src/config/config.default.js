@@ -1,16 +1,16 @@
 var config = module.exports = {};
 
 config.env = 'dev';
-config.host = 'localhost';
-config.port = 3001;
+config.host = process.env.App_Host;
+config.port = process.env.App_Port;
 
 config.projectName = "MySelfLog-Api"; // no spaces or strange chars please
 
-config.eventstoreConnection = 'tcp://localhost:1113';
-config.eventstoreConnectionSettings = {};
+config.eventstoreConnection = process.env.Eventstore_Connection;
+config.eventstoreConnectionSettings = process.env.Eventstore_Connection_Settings;
 config.publishTo = "diary-input";
 
-config.elasticSearchLink = "http://localhost:9200";
+config.elasticSearchLink = process.env.Elastic_Host;
 
 // logging
 config.logAppender = "debug";
