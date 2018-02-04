@@ -4,13 +4,13 @@ config.env = 'dev';
 config.host = process.env.App_Host;
 config.port = process.env.App_Port;
 
-config.projectName = "MySelfLog-Api"; // no spaces or strange chars please
+config.projectName = "myselflog-api"; 
 
-config.eventstoreConnection = process.env.Eventstore_Connection || 'tcp://localhost:1113';
-config.eventstoreConnectionSettings = process.env.Eventstore_Connection_Settings || {};
-config.publishTo = "diary-input";
+config.eventstoreConnection = process.env.EventStore_Link || 'tcp://eventstore:1113';
+config.eventstoreConnectionSettings = process.env.Eventstore_Connection_Settings || {'admin':'changeit'};
+config.publishTo = process.env.Eventstore_Publish_To || "diary-input";
 
-config.elasticSearchLink = process.env.Elastic_Host;
+config.elasticSearchLink = process.env.Elastic_Link || 'http://elasticsearch:9200';
 
 // logging
 config.logAppender = "debug";

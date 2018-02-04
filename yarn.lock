@@ -1070,9 +1070,9 @@ netmask@~1.0.4:
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/netmask/-/netmask-1.0.6.tgz#20297e89d86f6f6400f250d9f4f6b4c1945fcd35"
 
-node-eventstore-client@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/node-eventstore-client/-/node-eventstore-client-0.2.0.tgz#52c1b25ba6f8986adb743491145c99cc24c8d16b"
+node-eventstore-client@^0.1.11:
+  version "0.1.11"
+  resolved "https://registry.yarnpkg.com/node-eventstore-client/-/node-eventstore-client-0.1.11.tgz#6f5ddcf53747b67e5755fc3b87b9edd2b20da87b"
   dependencies:
     "@types/long" "^3.0.31"
     "@types/node" "^6.0.47"
