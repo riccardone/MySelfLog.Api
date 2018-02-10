@@ -1,5 +1,7 @@
-require('dotenv').config()
-const express = require('express')
+require('dotenv').config();
+var swaggerUi = require('swagger-ui-express');
+var swaggerDocument = require('./swagger.json');
+// https://blog.cloudboost.io/adding-swagger-to-existing-node-js-project-92a6624b855b
 var cfg = require('./config');
 var bodyParser = require('body-parser');
 var connectionFactory = require('./connectionFactory');

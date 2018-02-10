@@ -7,11 +7,17 @@ module.exports = ConnectionFactory;
 
 function ConnectionFactory() { }
 
-ConnectionFactory.prototype.CreateEsConnection = function() {
-    var esConnection = esClient.createConnection(cfg.eventstoreConnectionSettings, cfg.eventstoreConnection, cfg.projectName);    
-    esConnection.connect();
+ConnectionFactory.prototype.CreateEsConnection = function () {
+    var esConnection = esClient.createConnection(cfg.eventstoreConnectionSettings, cfg.eventstoreConnection, cfg.projectName);
+    esConnection.on("error", err =>
+        logger.error(`Error occurred on connection: ${err}`)
+    );
+    esConnection.on("closed", reason =>
+        logger.warn(`Connection closed, reason: ${reason}`)
+    );
     esConnection.once("connected", function (tcpEndPoint) {
         logger.info("Connected to eventstore at " + tcpEndPoint.host + ":" + tcpEndPoint.port)
-    });    
+    });
+    esConnection.connect().catch(err => console.log(err));    
     return esConnection;
 }
