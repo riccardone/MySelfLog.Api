@@ -34,7 +34,7 @@ app.get('/', function (req, res) {
     res.send('ok');
 });
 
-function getElasticClient(){
+function getElasticClient() {
     return new elasticsearch.Client({
         host: cfg.elasticSearchLink,
         log: 'trace'
@@ -53,6 +53,9 @@ app.get('/api/v1/diary/check/:diaryName', function (req, res) {
         }
         return res.status(201).send("available");
     }).catch(err => {
+        if (err.message.startsWith("[index_not_found_exception]")) {
+            return res.status(201).send("available");
+        }
         if (!err.statusCode) {
             res.status(500).send('error');
         } else {
@@ -71,8 +74,8 @@ app.get('/api/v1/diary/:profile', function (req, res) {
         type: "diaryEvent",
         id: id
     }).then(d => {
-        if (d.found) {            
-            return res.status(201).send(d._source);    
+        if (d.found) {
+            return res.status(201).send(d._source);
         }
         return res.status(201).send("not available");
     }).catch(err => {
