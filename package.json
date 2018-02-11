@@ -16,6 +16,7 @@
     "express": "^4.16.2",
     "log4js": "^2.4.1",
     "node-eventstore-client": "^0.1.11",
+    "swagger-ui-express": "^2.0.15",
     "uuid": "^3.1.0"
   },
   "devDependencies": {
