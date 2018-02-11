@@ -68,7 +68,7 @@ app.get('/api/v1/diary/check/:diaryName', function (req, res) {
 app.get('/api/v1/diary/:profile', function (req, res) {
     var id = eventDataMapper.getCorrelationId(req.params.profile);
     // Query elastic and check if this diaryName is already in use   
-    var diaryName = req.params.diaryName;
+    //var diaryName = req.params.diaryName;
     getElasticClient().get({
         index: "diary-events",
         type: "diaryEvent",
@@ -79,6 +79,9 @@ app.get('/api/v1/diary/:profile', function (req, res) {
         }
         return res.status(201).send("not available");
     }).catch(err => {
+        if (err.message.startsWith("[index_not_found_exception]")) {
+            return res.status(err.statusCode).send("index not found");
+        }
         if (!err.statusCode) {
             res.status(500).send('error');
         } else {
