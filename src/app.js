@@ -1,6 +1,7 @@
 require('dotenv').config();
-var swaggerUi = require('swagger-ui-express');
-var swaggerDocument = require('./swagger.json');
+const express = require('express')
+// var swaggerUi = require('swagger-ui-express');
+// var swaggerDocument = require('./swagger.json');
 // https://blog.cloudboost.io/adding-swagger-to-existing-node-js-project-92a6624b855b
 var cfg = require('./config');
 var bodyParser = require('body-parser');
@@ -8,7 +9,6 @@ var connectionFactory = require('./connectionFactory');
 var senderModule = require('./messageSender');
 var validation = require('./validation');
 var eventDataMapper = require('./eventdata-mapper');
-var elasticRepositoryModule = require('./ElasticRepository');
 var elasticsearch = require('elasticsearch');
 
 // logger setup
