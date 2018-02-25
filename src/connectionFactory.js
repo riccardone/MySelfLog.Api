@@ -1,5 +1,4 @@
 var esClient = require('node-eventstore-client');
-var cfg = require('./config');
 var log4js = require('log4js');
 var logger = log4js.getLogger('MessageSender');
 
@@ -8,7 +7,7 @@ module.exports = ConnectionFactory;
 function ConnectionFactory() { }
 
 ConnectionFactory.prototype.CreateEsConnection = function () {
-    var esConnection = esClient.createConnection(cfg.eventstoreConnectionSettings, cfg.eventstoreConnection, cfg.projectName);
+    var esConnection = esClient.createConnection({'admin':'changeit'}, 'tcp://eventstore:1113', 'myselflog-api');
     esConnection.on("error", err =>
         logger.error(`Error occurred on connection: ${err}`)
     );

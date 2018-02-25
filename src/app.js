@@ -1,9 +1,7 @@
-require('dotenv').config();
 const express = require('express')
 // var swaggerUi = require('swagger-ui-express');
 // var swaggerDocument = require('./swagger.json');
 // https://blog.cloudboost.io/adding-swagger-to-existing-node-js-project-92a6624b855b
-var cfg = require('./config');
 var bodyParser = require('body-parser');
 var connectionFactory = require('./connectionFactory');
 var senderModule = require('./messageSender');
@@ -24,6 +22,8 @@ var connFactoryInstance = new connectionFactory();
 var conn = connFactoryInstance.CreateEsConnection();
 var sender = new senderModule(conn);
 
+var _publishTo = "diary-input";
+
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -36,7 +36,7 @@ app.get('/', function (req, res) {
 
 function getElasticClient() {
     return new elasticsearch.Client({
-        host: cfg.elasticSearchLink,
+        host: 'http://elasticsearch:9200/',
         log: 'trace'
     });
 }
@@ -122,11 +122,10 @@ app.post('/api/v1/diary', function (req, res) {
     });
 })
 
-var server = app.listen(cfg.port, cfg.host, function () {
+var server = app.listen(5001, '0.0.0.0', function () {
     var address = server.address().address + ":" + server.address().port;
-
-    logger.info("Running environment configuration: %s", cfg.env)
-    logger.info(cfg.projectName + " listening on %s", address)
-    logger.info(cfg.projectName + " publishing to %s", cfg.publishTo)
+    
+    logger.info("MySelfLog-Api listening on %s", address)
+    logger.info("MySelfLog-Api publishing to %s", _publishTo)
 });
 module.exports = server;
