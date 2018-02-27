@@ -17,6 +17,7 @@
     "log4js": "^2.4.1",
     "node-eventstore-client": "0.2.1",
     "package": "^1.0.1",
+    "sinon": "^4.4.2",
     "swagger-ui-express": "^2.0.15",
     "uuid": "^3.1.0"
   },
