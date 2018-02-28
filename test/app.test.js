@@ -10,7 +10,6 @@ chai.use(chaiHttp);
 
 var sender = new senderModule(null, "test");
 const fakeEsClient = sinon.stub();
-fakeEsClient.prototype.get = sinon.stub().resolves({ found: true, _source: "test" });
 var esClient = new fakeEsClient();
 const fakeLogger = sinon.stub();
 fakeLogger.prototype.error = sinon.stub();
@@ -27,11 +26,21 @@ describe('/', () => {
           done();
         });
     });
-    it('it should GET ciccio', (done) => {
+    it('it should GET 200 (diary found)', (done) => {
+      fakeEsClient.prototype.get = sinon.stub().resolves({ found: true, _source: "test" });
       chai.request(service.server)
         .get('/api/v1/diary/ciccio')
         .end((err, res) => {
-          res.should.have.status(201);
+          res.should.have.status(200);
+          done();
+        });
+    });
+    it('it should GET 404 (diary not found)', (done) => {
+      fakeEsClient.prototype.get = sinon.stub().resolves({ found: false, _source: "test" });
+      chai.request(service.server)
+        .get('/api/v1/diary/ciccio')
+        .end((err, res) => {
+          res.should.have.status(404);
           done();
         });
     });
@@ -39,7 +48,7 @@ describe('/', () => {
 });
 describe('/POST /api/v1/diary', () => {
   describe('/POST wrong data', () => {
-    it('it should POST 400 (healty check)', (done) => {
+    it('it should POST 400 (Bad Request)', (done) => {
       chai.request(service.server)
         .post('/api/v1/diary')
         .end((err, res) => {

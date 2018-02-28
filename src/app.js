@@ -7,16 +7,12 @@ var serviceModule = require('./service');
 var log4js = require('log4js');
 var loggerConfig = require('./logging/');
 loggerConfig.run();
-var logger = log4js.getLogger('app');
-
-const app = express();
-app.use(bodyParser.json());
 
 var connFactoryInstance = new connectionFactory();
 var conn = connFactoryInstance.CreateEsConnection();
 var sender = new senderModule(conn);
 
-var service = new serviceModule(sender, getElasticClient());
+var service = new serviceModule(sender, getElasticClient(), log4js.getLogger('service'));
 
 function getElasticClient() {
     return new elasticsearch.Client({

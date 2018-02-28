@@ -38,12 +38,12 @@ app.get('/api/v1/diary/check/:diaryName', function (req, res) {
         q: 'DiaryName:"' + diaryName + '"'
     }).then(d => {
         if (d.hits.total > 0) {
-            return res.status(201).send("not available");
+            return res.status(200).send("not available");
         }
-        return res.status(201).send("available");
+        return res.status(200).send("available");
     }).catch(err => {
         if (err.message.startsWith("[index_not_found_exception]")) {
-            return res.status(201).send("available");
+            return res.status(200).send("available");
         }
         if (!err.statusCode) {
             res.status(500).send('error');
@@ -56,17 +56,16 @@ app.get('/api/v1/diary/check/:diaryName', function (req, res) {
 
 app.get('/api/v1/diary/:profile', function (req, res) {
     var id = eventDataMapper.getCorrelationId(req.params.profile);
-    // Query elastic and check if this diaryName is already in use   
-    //var diaryName = req.params.diaryName;
+    // Query elastic and check if this diaryName is already in use       
     _esClient.get({
         index: "diary-events",
         type: "diaryEvent",
         id: id
     }).then(d => {
         if (d.found) {
-            return res.status(201).send(d._source);
+            return res.status(200).send(d._source);
         }
-        return res.status(201).send("not available");
+        return res.status(404).send();
     }).catch(err => {
         if (err.message.startsWith("[index_not_found_exception]")) {
             return res.status(err.statusCode).send("index not found");
@@ -86,7 +85,7 @@ app.post('/api/v1/logs', function (req, res) {
         _logger.error(errorMessage);
         return res.status(400).send(errorMessage);
     }
-    sender.send(req.body, 'LogReceived').then(function (result) {
+    _sender.send(req.body, 'LogReceived').then(function (result) {
         _logger.debug("Event stored");
         res.send(); // TODO redirect on the diary?
     }).catch(function (err) {
@@ -102,7 +101,7 @@ app.post('/api/v1/diary', function (req, res) {
         return res.status(400).send(errorMessage);
     }
     // TODO change this nonsense event type and use a proper one
-    sender.send(req.body, 'CreateDiary').then(function (result) {
+    _sender.send(req.body, 'CreateDiary').then(function (result) {
         _logger.debug("Event stored");
         res.send(); // TODO redirect on the diary?
     }).catch(function (err) {
