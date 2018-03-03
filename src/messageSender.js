@@ -4,7 +4,7 @@ var _esConnection
 var _publishTo = 'diary-input'
 
 function MessageSender (conn, publishTo) {
-  this._esConnection = conn
+  _esConnection = conn
   if (publishTo) {
     _publishTo = publishTo
   }

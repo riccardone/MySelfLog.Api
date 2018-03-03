@@ -36,21 +36,18 @@ app.get('/api/v1/diary/check/:diaryName', function (req, res) {
   _esClient.search({
     index: 'diary-events',
     q: 'DiaryName:"' + diaryName + '"'
-  }).then(d => {
-    if (d.hits.total > 0) {
+  }, function (error, response) {
+    if (error) {
+      if (error.message === 'Not Found') {
+        return res.status(404).send(error.message)
+      }
+      _logger.error(error)
+      return res.status(500).send(error.message)
+    }
+    if (response.hits.total > 0) {
       return res.status(200).send('not available')
     }
     return res.status(200).send('available')
-  }).catch(err => {
-    if (err.message.startsWith('[index_not_found_exception]')) {
-      return res.status(200).send('available')
-    }
-    if (!err.statusCode) {
-      res.status(500).send('error')
-    } else {
-      res.status(err.statusCode).send('error')
-    }
-    _logger.error(err)
   })
 })
 
@@ -61,21 +58,15 @@ app.get('/api/v1/diary/:profile', function (req, res) {
     index: 'diary-events',
     type: 'diaryEvent',
     id: id
-  }).then(d => {
-    if (d.found) {
-      return res.status(200).send(d._source)
+  }, function (error, response) {
+    if (error) {
+      if (error.message === 'Not Found') {
+        return res.status(404).send(error.message)
+      }
+      _logger.error(error)
+      return res.status(500).send(error.message)
     }
-    return res.status(404).send()
-  }).catch(err => {
-    if (err.message.startsWith('[index_not_found_exception]')) {
-      return res.status(err.statusCode).send('index not found')
-    }
-    if (!err.statusCode) {
-      res.status(500).send('error')
-    } else {
-      res.status(err.statusCode).send('error')
-    }
-    _logger.error(err)
+    return res.status(200).send(response._source)
   })
 })
 
