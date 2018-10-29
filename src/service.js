@@ -4,10 +4,12 @@ module.exports = function(config) {
   var bodyParser = require("body-parser");
   var sender = (config && config.sender) || eventStoreSender(config);
   var esClient = (config && config.esClient) || elasticClient();
+  var reader = require("./dataReader");
   var diaryRoute = require("./routes/api.v1.diary")(
     sender,
     esClient,
-    config.logger
+    config.logger,
+    reader(esClient)
   );
   var logsRoute = require("./routes/api.v1.logs")(
     sender,

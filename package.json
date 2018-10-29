@@ -17,6 +17,7 @@
     "eslint-plugin-markdown": "^1.0.0-beta.6",
     "express": "^4.16.2",
     "log4js": "^2.5.3",
+    "moment": "^2.22.2",
     "node-eventstore-client": "0.2.1",
     "package": "^1.0.1",
     "sinon": "^4.4.2",
