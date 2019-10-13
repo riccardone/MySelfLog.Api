@@ -11,7 +11,7 @@ module.exports = function (sender, elasticClient, logger) {
       return res.status(400).send(errorMessage)
     }
     _sender.send(req.body, 'LogReceived').then(function (result) {
-      res.send() // TODO redirect on the diary?
+      res.send()
     }).catch((error) => {
       _logger.error(error)
       res.status(500).send('There is a technical problem and the log has not been stored')
