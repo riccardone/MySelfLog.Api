@@ -30,5 +30,5 @@ stages:
     - task: Docker@2
       inputs:
         containerRegistry: 'dockerhub'
-        repository: 'myselflog-api'
+        repository: 'riccardone/myselflog-api'
         command: 'push'
