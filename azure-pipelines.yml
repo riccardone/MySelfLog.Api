@@ -14,7 +14,7 @@ variables:
   # define 3 more variables: registryName, registryLogin and registryPassword in the build pipeline in UI
 
 steps:
-- bash: docker build -f **/Dockerfile -t $(registryServerName)/$(imageName):$(build.buildId) .
+- bash: docker build -t $(registryServerName)/$(imageName):$(build.buildId) .
   displayName: 'docker build'
 
 - bash: |
