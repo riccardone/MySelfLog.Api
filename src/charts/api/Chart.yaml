@@ -1,0 +1,4 @@
+apiVersion: v1
+description: Pys.Api is the interface to log health values and retrieve them back 
+name: pysapi
+version: v0.1.0
