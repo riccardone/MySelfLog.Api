@@ -8,7 +8,7 @@ trigger:
     - refs/heads/*  
 
 variables:
-  projectName: pysapi
+  projectName: api
   registryServerName: '$(registryName).azurecr.io'
   imageName: '$(projectName)'
   # define 3 more variables: registryName, registryLogin and registryPassword in the build pipeline in UI
@@ -28,7 +28,7 @@ steps:
   inputs:
     helmVersion: 2.14.1
 
-- bash: helm package --version $(build.buildId) --destination $(build.artifactStagingDirectory) **/charts/$(projectName)
+- bash: helm package --version $(build.buildId) --destination $(build.artifactStagingDirectory) ./src/charts/$(projectName)
   displayName: 'helm package'
 
 - bash: az acr helm push -n $(registryName) -u $(registryLogin) -p $(registryPassword) $(build.artifactStagingDirectory)/$(projectName)-$(build.buildId).tgz
