@@ -10,18 +10,18 @@
     "test": "mocha --exit"
   },
   "dependencies": {
-    "body-parser": "^1.18.2",
-    "cors": "^2.8.4",
-    "dotenv": "^5.0.1",
-    "elasticsearch": "^14.0.0",
-    "eslint-plugin-markdown": "^1.0.0-beta.6",
-    "express": "^4.16.2",
-    "log4js": "^2.5.3",
-    "node-eventstore-client": "0.2.1",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "elasticsearch": "^16.4.0",
+    "eslint-plugin-markdown": "^1.0.0",
+    "express": "^4.17.1",
+    "log4js": "^5.2.2",
+    "node-eventstore-client": "^0.2.13",
     "package": "^1.0.1",
-    "sinon": "^4.4.2",
-    "standard": "^11.0.0",
-    "uuid": "^3.1.0"
+    "sinon": "^7.5.0",
+    "standard": "^14.3.1",
+    "uuid": "^3.3.3"
   },
   "devDependencies": {
     "chai": "^4.1.2",
