@@ -37,7 +37,9 @@ describe('/GET Diary', () => {
     chai.request(buildService(null, new FakeEsClient()))
       .get('/api/v1/diary/ciccio')
       .end((err, res) => {
-        err.should.have.status(404)
+        if (err) {
+          err.should.have.status(404)
+        }
         done()
       })
   })
@@ -76,7 +78,9 @@ describe('/POST /api/v1/diary', () => {
       chai.request(buildService())
         .post('/api/v1/diary')
         .end((err, res) => {
-          err.should.have.status(400)
+          if (err) {
+            err.should.have.status(400)
+          }          
           done()
         })
     })

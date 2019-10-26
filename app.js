@@ -11,7 +11,7 @@ var server = service.listen(process.env.App_Port, '0.0.0.0', function () {
   var address = server.address().address + ':' + server.address().port
 
   logger.info('listening on %s', address)
-  logger.info('publishing to %s', publishTo)
+  logger.info('publishing to %s', publishTo)  
 })
 
 module.exports = server
