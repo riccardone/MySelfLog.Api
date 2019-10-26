@@ -26,25 +26,25 @@ module.exports = function(sender, elasticClient, logger) {
       });
   });
 
-  router.get("/:profile", function(req, res) {
-    var id = eventDataMapper.getCorrelationId(req.params.profile);
+  router.get('/:profile', function (req, res) {
+    var id = eventDataMapper.getCorrelationId(req.params.profile)
     // Query elastic and check if this diaryName is already in use
     _esClient
       .get({
-        index: "diary-events",
-        type: "diaryEvent",
+        index: 'diary-events',
+        // type: "diaryEvent",
         id: id
       })
       .then(d => {
         if (d.found) {
-          return res.status(200).send(d._source);
+          return res.status(200).send(d._source)
         }
-        return res.status(404).send();
+        return res.status(404).send()
       })
       .catch(err => {
-        return handleError(err, res);
-      });
-  });
+        return handleError(err, res)
+      })
+  })
 
   function handleError(err, res) {
     if (err.message.startsWith("[index_not_found_exception]")) {
