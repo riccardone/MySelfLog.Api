@@ -32,7 +32,7 @@ module.exports = function (sender, elasticClient, logger) {
     _esClient
       .get({
         index: 'diary-events',
-        // type: "diaryEvent",
+        type: 'diaryEvent',
         id: id
       })
       .then(d => {
