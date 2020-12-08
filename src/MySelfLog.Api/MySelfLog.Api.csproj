@@ -4,6 +4,10 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>MySelfLog.Api.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Finbuckle.MultiTenant.AspNetCore" Version="6.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.0" NoWarn="NU1605" />
@@ -24,6 +28,7 @@
     <ProjectReference Include="..\MySelfLog.Admin.Model\MySelfLog.Admin.Model.csproj" />
     <ProjectReference Include="..\MySelfLog.Contracts.Api\MySelfLog.Contracts.Api.csproj" />
     <ProjectReference Include="..\MySelfLog.Contracts\MySelfLog.Contracts.csproj" />
+    <ProjectReference Include="..\MySelfLog.MessageSender.EventStore\MySelfLog.MessageSender.EventStore.csproj" />
   </ItemGroup>
 
 </Project>

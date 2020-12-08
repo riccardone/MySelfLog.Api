@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.Extensions.Logging;
 using MySelfLog.Admin.Model;
 using MySelfLog.Api.Extensions;
+using MySelfLog.Api.Services;
+using MySelfLog.Contracts.Api;
 using NLog;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
@@ -37,6 +39,13 @@ namespace MySelfLog.Api
                 //o.ApiVersionSelector = new ConstantApiVersionSelector(new ApiVersion(1, 0));
                 o.AssumeDefaultVersionWhenUnspecified = true;
             });
+
+            services.AddScoped<IIdGenerator, IdGenerator>();
+            services.AddScoped<IResourceLocator, FileLocator>();
+            services.AddScoped<ISchemaProvider, SchemaProvider>();
+            services.AddScoped<IResourceElements, ResourceElements>();
+            services.AddScoped<IPayloadValidator, PayloadValidator>();
+            services.AddScoped<IMessageSenderFactory, MessageSenderFactory>();
 
             services.AddControllers()
                 .AddControllersAsServices()
@@ -76,7 +85,7 @@ namespace MySelfLog.Api
                 //Use method name as operationId
                 c.CustomOperationIds(apiDesc => apiDesc.TryGetMethodInfo(out MethodInfo methodInfo) ? methodInfo.Name : null);
 
-                var filePath = Path.Combine(AppContext.BaseDirectory, "Digital.Insuring.Api.xml");
+                var filePath = Path.Combine(AppContext.BaseDirectory, "MySelfLog.Api.xml");
                 c.IncludeXmlComments(filePath);
             });
             services.AddHealthChecks();
@@ -111,14 +120,7 @@ namespace MySelfLog.Api
             // specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Chubb-API V1");
-                c.SwaggerEndpoint("https://emeasit.chubbdigital.com/sales.chubbapi/swagger/v1/swagger.json", "PyS Chubb-API");
-                c.RoutePrefix = string.Empty;
-            });
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v2/swagger.json", "Digital Insuring API V2");
-                c.SwaggerEndpoint("https://emeasit.chubbdigital.com/sales.chubbapi/swagger/v2/swagger.json", "Digital Insuring API");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "MySelfLog API V1");
                 c.RoutePrefix = string.Empty;
             });
             app.ConfigureExceptionHandler(Logger);
