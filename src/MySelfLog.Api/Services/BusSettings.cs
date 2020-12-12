@@ -1,18 +1,16 @@
-﻿using Microsoft.Extensions.Configuration;
-using MySelfLog.Contracts.Api;
+﻿using MySelfLog.Contracts.Api;
 
 namespace MySelfLog.Api.Services
 {
     public class BusSettings : IBusSettings
     {
-        private readonly IConfiguration _configuration;
-
-        public BusSettings(IConfiguration configuration)
+        public BusSettings(string link, string name)
         {
-            _configuration = configuration;
+            Link = link;
+            Name = name;
         }
 
-        public string Link => _configuration.Get<AppSettings>().Link;
-        public string Name => _configuration.Get<AppSettings>().ConnectionName;
+        public string Link { get; }
+        public string Name { get; }
     }
 }

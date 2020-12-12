@@ -66,7 +66,7 @@
             
             </summary>
         </member>
-        <member name="M:MySelfLog.Api.Services.MessageSenderFactory.#ctor(Microsoft.Extensions.Logging.ILogger{MySelfLog.Api.Services.MessageSenderFactory},Finbuckle.MultiTenant.IMultiTenantStore{MySelfLog.Admin.Model.MySelfLogTenantInfo},MySelfLog.Contracts.Api.IBusSettings)">
+        <member name="M:MySelfLog.Api.Services.MessageSenderFactory.#ctor(Microsoft.Extensions.Logging.ILogger{MySelfLog.Api.Services.MessageSenderFactory},Finbuckle.MultiTenant.IMultiTenantStore{MySelfLog.Admin.Model.MySelfLogTenantInfo})">
             <summary>
             
             </summary>

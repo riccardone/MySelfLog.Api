@@ -14,18 +14,16 @@ namespace MySelfLog.Api.Services
     {
         private readonly ILogger<MessageSenderFactory> _logger;
         private readonly IMultiTenantStore<MySelfLogTenantInfo> _store;
-        private readonly IBusSettings _eventStoreSettings;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="logger"></param>
         /// <param name="store"></param>
-        public MessageSenderFactory(ILogger<MessageSenderFactory> logger, IMultiTenantStore<MySelfLogTenantInfo> store, IBusSettings eventStoreSettings)
+        public MessageSenderFactory(ILogger<MessageSenderFactory> logger, IMultiTenantStore<MySelfLogTenantInfo> store)
         {
             _logger = logger;
             _store = store;
-            _eventStoreSettings = eventStoreSettings;
         }
 
         /// <summary>
@@ -43,20 +41,17 @@ namespace MySelfLog.Api.Services
 
             var tenant = _store.TryGetByIdentifierAsync(source).Result;
             if (tenant == null)
-                throw new Exception($"I can't find a configured tenant with source: '{source}'");
+                throw new Exception($"I can't find a configured tenant for this source");
             if (!string.IsNullOrWhiteSpace(tenant.MessageBusLink))
             {
                 _logger.LogInformation($"Configuring '{nameof(MessageSenderToEventStore)}'");
-                sender = new MessageSenderToEventStore(_eventStoreSettings);
+                sender = new MessageSenderToEventStore(new BusSettings(tenant.MessageBusLink, tenant.Identifier));
             }
             else
             {
-                _logger.LogWarning($"Configuring '{nameof(MessageSenderInMemory)}'. Please use this only for testing!");
+                _logger.LogWarning($"Configuring '{nameof(MessageSenderInMemory)}' only for testing!");
                 sender = new MessageSenderInMemory();
             }
-
-            if (sender == null)
-                throw new Exception("Review configuration settings as I can't build a message sender");
 
             return sender;
         }

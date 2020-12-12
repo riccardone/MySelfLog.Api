@@ -27,7 +27,7 @@ namespace MySelfLog.Api.Controllers
         private readonly ILogger<DataInputController> _logger;
         private readonly IPayloadValidator _payloadValidator;
         private readonly IIdGenerator _idGenerator;
-        private const string IdField = "Id";
+        private const string IdField = "CorrelationId";
         private readonly IMultiTenantStore<MySelfLogTenantInfo> _store;
         private readonly IMessageSenderFactory _messageSenderFactory;
 
@@ -37,6 +37,7 @@ namespace MySelfLog.Api.Controllers
         /// <param name="logger">logger</param>
         /// <param name="config"></param>
         /// <param name="store"></param>
+        /// <param name="messageSenderFactory"></param>
         public DataInputController(ILogger<DataInputController> logger, IPayloadValidator payloadValidator, IIdGenerator idGenerator,
             IConfiguration config, IMultiTenantStore<MySelfLogTenantInfo> store,
                                    IMessageSenderFactory messageSenderFactory)
@@ -101,14 +102,36 @@ namespace MySelfLog.Api.Controllers
                 return BadRequest("DataContentType must be: 'application/json'");
 
             if (string.IsNullOrWhiteSpace(request.Type))
-                request.Type = "insuring";
+                return BadRequest("Type must be set");
 
+            if (!IsValid(request, out var badRequest)) 
+                return badRequest;
+
+            var data = JsonConvert.DeserializeObject<JObject>(request.Data.ToString());
+
+            var result = CheckIfMessageNeedCorrelationId(request, data, request.Id);
+
+            EncryptMessageIfNeeded(request);
+
+            var sender = _messageSenderFactory.Build(request.Source.ToString());
+            sender.SendAsync(request).Wait();
+
+            return Ok(new { CorrelationId = result });
+        }
+
+        private bool IsValid(CloudEventRequest request, out IActionResult badRequest)
+        {
+            badRequest = null;
             if (request.DataSchema != null && request.DataSchema.IsWellFormedOriginalString())
             {
                 if (request.Data == null)
                 {
-                    return BadRequest("Data field is empty");
+                    {
+                        badRequest = BadRequest("Data field is empty");
+                        return false;
+                    }
                 }
+
                 var validationResult = _payloadValidator.Validate(request.DataSchema.ToString(), request.Data.ToString());
 
                 if (!validationResult.IsValid)
@@ -122,41 +145,42 @@ namespace MySelfLog.Api.Controllers
                         StringEscapeHandling = StringEscapeHandling.EscapeHtml
                     };
 
-                    return BadRequest(JsonConvert.SerializeObject(new { Error = errors.Replace("'", "") }, settings));
+                    {
+                        badRequest = BadRequest(JsonConvert.SerializeObject(new {Error = errors.Replace("'", "")}, settings));
+                        return false;
+                    }
                 }
-                _logger.LogInformation($"Request received with valid schema (id:{request.Id};source:{request.Source};type:{request.Type};dataSchema:{request.DataSchema})");
+
+                _logger.LogInformation(
+                    $"Request received with valid schema (id:{request.Id};source:{request.Source};type:{request.Type};dataSchema:{request.DataSchema})");
             }
             else
-                _logger.LogInformation($"Request received without schema (id:{request.Id};source:{request.Source};type:{request.Type})");
+                _logger.LogInformation(
+                    $"Request received without schema (id:{request.Id};source:{request.Source};type:{request.Type})");
 
-            JObject data = JsonConvert.DeserializeObject<JObject>(request.Data.ToString());
-            var result = request.Id;
+            return true;
+        }
 
-            //var hasIdentifier = false;
-            //if (request.Type.Contains(""))
-            //{
-            //    foreach (KeyValuePair<string, JToken> property in data)
-            //    {
-            //        if (!property.Key.Equals(IdField)) continue;
-            //        hasIdentifier = true;
-            //        result = property.Value.ToString();
-            //        break;
-            //    }
+        private string CheckIfMessageNeedCorrelationId(CloudEventRequest request, JObject data, string result)
+        {
+            var hasIdentifier = false;
+            foreach (KeyValuePair<string, JToken> property in data)
+            {
+                if (!property.Key.ToLower().Equals(IdField.ToLower())) continue;
+                hasIdentifier = true;
+                result = property.Value.ToString();
+                break;
+            }
 
-            //    if (!hasIdentifier)
-            //    {
-            //        var id = new JValue(_idGenerator.GenerateId(string.Empty));
-            //        data.Add(IdField, id);
-            //        result = id.Value.ToString();
-            //        request.Data = data;
-            //    }
-            //}
+            if (!hasIdentifier)
+            {
+                var id = new JValue(_idGenerator.GenerateId(string.Empty));
+                data.Add(IdField, id);
+                result = id.Value.ToString();
+                request.Data = data;
+            }
 
-            EncryptMessageIfNeeded(request);
-            var sender = _messageSenderFactory.Build(request.Source.ToString());
-            sender.SendAsync(request).Wait();
-
-            return Ok(new { id = result });
+            return result;
         }
 
         private void EncryptMessageIfNeeded(CloudEventRequest request)

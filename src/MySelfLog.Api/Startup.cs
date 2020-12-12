@@ -46,6 +46,7 @@ namespace MySelfLog.Api
             services.AddScoped<IResourceElements, ResourceElements>();
             services.AddScoped<IPayloadValidator, PayloadValidator>();
             services.AddScoped<IMessageSenderFactory, MessageSenderFactory>();
+            services.AddScoped<IBusSettings, BusSettings>();
 
             services.AddControllers()
                 .AddControllersAsServices()
