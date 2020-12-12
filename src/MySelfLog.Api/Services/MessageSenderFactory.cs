@@ -14,16 +14,18 @@ namespace MySelfLog.Api.Services
     {
         private readonly ILogger<MessageSenderFactory> _logger;
         private readonly IMultiTenantStore<MySelfLogTenantInfo> _store;
+        private readonly IBusSettings _eventStoreSettings;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="logger"></param>
         /// <param name="store"></param>
-        public MessageSenderFactory(ILogger<MessageSenderFactory> logger, IMultiTenantStore<MySelfLogTenantInfo> store)
+        public MessageSenderFactory(ILogger<MessageSenderFactory> logger, IMultiTenantStore<MySelfLogTenantInfo> store, IBusSettings eventStoreSettings)
         {
             _logger = logger;
             _store = store;
+            _eventStoreSettings = eventStoreSettings;
         }
 
         /// <summary>
@@ -45,7 +47,7 @@ namespace MySelfLog.Api.Services
             if (!string.IsNullOrWhiteSpace(tenant.MessageBusLink))
             {
                 _logger.LogInformation($"Configuring '{nameof(MessageSenderToEventStore)}'");
-                sender = new MessageSenderToEventStore();
+                sender = new MessageSenderToEventStore(_eventStoreSettings);
             }
             else
             {

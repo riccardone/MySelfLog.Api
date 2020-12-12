@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MySelfLog.Contracts.Api", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MySelfLog.Admin.Model", "MySelfLog.Admin.Model\MySelfLog.Admin.Model.csproj", "{D341BD2B-C0DF-4136-8FCC-A5C971A11028}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MySelfLog.MessageSender.EventStore", "MySelfLog.MessageSender.EventStore\MySelfLog.MessageSender.EventStore.csproj", "{47724B3C-8F67-45BA-B7EB-EB99B2B05DB1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MySelfLog.MessageSender.EventStore", "MySelfLog.MessageSender.EventStore\MySelfLog.MessageSender.EventStore.csproj", "{47724B3C-8F67-45BA-B7EB-EB99B2B05DB1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
