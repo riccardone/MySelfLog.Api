@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
-namespace MySelfLog.Api.Extensions
+namespace MySelfLog.Api.Middleware
 {
     public static class ExceptionMiddlewareExtensions
     {

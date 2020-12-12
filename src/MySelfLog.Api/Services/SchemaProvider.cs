@@ -34,7 +34,7 @@ namespace MySelfLog.Api.Services
 
             if (string.IsNullOrWhiteSpace(schemaPathRoot) && string.IsNullOrWhiteSpace(schemaFileName))
                 throw new Exception("invalid config settings for Schema:PathRoot and Schema:File");
-            throw new FileNotFoundException("file not found");
+            throw new FileNotFoundException("specified schema not found");
         }
     }
 }

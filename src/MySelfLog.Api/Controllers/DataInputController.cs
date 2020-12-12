@@ -105,6 +105,10 @@ namespace MySelfLog.Api.Controllers
 
             if (request.DataSchema != null && request.DataSchema.IsWellFormedOriginalString())
             {
+                if (request.Data == null)
+                {
+                    return BadRequest("Data field is empty");
+                }
                 var validationResult = _payloadValidator.Validate(request.DataSchema.ToString(), request.Data.ToString());
 
                 if (!validationResult.IsValid)
@@ -126,27 +130,27 @@ namespace MySelfLog.Api.Controllers
                 _logger.LogInformation($"Request received without schema (id:{request.Id};source:{request.Source};type:{request.Type})");
 
             JObject data = JsonConvert.DeserializeObject<JObject>(request.Data.ToString());
-            var hasIdentifier = false;
             var result = request.Id;
 
-            if (request.Type.Contains("bindpolicy"))
-            {
-                foreach (KeyValuePair<string, JToken> property in data)
-                {
-                    if (!property.Key.Equals(IdField)) continue;
-                    hasIdentifier = true;
-                    result = property.Value.ToString();
-                    break;
-                }
+            //var hasIdentifier = false;
+            //if (request.Type.Contains(""))
+            //{
+            //    foreach (KeyValuePair<string, JToken> property in data)
+            //    {
+            //        if (!property.Key.Equals(IdField)) continue;
+            //        hasIdentifier = true;
+            //        result = property.Value.ToString();
+            //        break;
+            //    }
 
-                if (!hasIdentifier)
-                {
-                    var id = new JValue(_idGenerator.GenerateId(string.Empty));
-                    data.Add(IdField, id);
-                    result = id.Value.ToString();
-                    request.Data = data;
-                }
-            }
+            //    if (!hasIdentifier)
+            //    {
+            //        var id = new JValue(_idGenerator.GenerateId(string.Empty));
+            //        data.Add(IdField, id);
+            //        result = id.Value.ToString();
+            //        request.Data = data;
+            //    }
+            //}
 
             EncryptMessageIfNeeded(request);
             var sender = _messageSenderFactory.Build(request.Source.ToString());

@@ -11,7 +11,7 @@ using System.Reflection;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.Extensions.Logging;
 using MySelfLog.Admin.Model;
-using MySelfLog.Api.Extensions;
+using MySelfLog.Api.Middleware;
 using MySelfLog.Api.Services;
 using MySelfLog.Contracts.Api;
 using NLog;
@@ -67,6 +67,30 @@ namespace MySelfLog.Api
                     Type = SecuritySchemeType.ApiKey,
                     Scheme = "Bearer"
                 });
+                c.AddSecurityDefinition(ApiKeyMiddleware.APIKEYNAME, new OpenApiSecurityScheme
+                {
+                    Description = "Api key needed to access the endpoints. X-Api-Key: My_API_Key",
+                    In = ParameterLocation.Header,
+                    Name = ApiKeyMiddleware.APIKEYNAME,
+                    Type = SecuritySchemeType.ApiKey
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Name = ApiKeyMiddleware.APIKEYNAME,
+                            Type = SecuritySchemeType.ApiKey,
+                            In = ParameterLocation.Header,
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = ApiKeyMiddleware.APIKEYNAME
+                            },
+                        },
+                        new string[] {}
+                    }
+                });
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
                     {
@@ -102,6 +126,7 @@ namespace MySelfLog.Api
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseAuthentication();
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -126,6 +151,8 @@ namespace MySelfLog.Api
             app.ConfigureExceptionHandler(Logger);
             //app.UseMvc();
             app.UseRouting();
+            app.UseAuthorization();
+            app.UseMiddleware<ApiKeyMiddleware>();
             app.UseCors("Open");
             app.UseMultiTenant();
             app.UseEndpoints(endpoints =>

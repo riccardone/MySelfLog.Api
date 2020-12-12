@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "Value": {
+      "type": "number"
+    },
+    "MmolValue": {
+      "type": "number"
+    },
+    "SlowTerapy": {
+      "type": "number"
+    },
+    "FastTerapy": {
+      "type": "number"
+    },
+    "Calories": {
+      "type": "number"
+    },
+    "Comment": {
+      "type": "string"
+    }
+  },
+  "required": [ ]
+}

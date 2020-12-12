@@ -1,0 +1,16 @@
+{
+    "type": "LogTerapy",
+    "source": "myselflog",
+    "id": "53d3f209-6613-4572-867d-66093730f223",
+    "time": "2020-12-12T12:31:51.641Z",
+    "dataContentType": "application/json",
+    "dataSchema": "logterapy/1.0",
+    "data": {
+        "Value": 120,
+        "MmolValue": 7.0,
+        "SlowTerapy": 0,
+        "FastTerapy": 3,
+        "Calories": 300,
+        "Comment": ""
+    }
+  }
