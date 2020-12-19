@@ -1,0 +1,121 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MySelfLog.Api</name>
+    </assembly>
+    <members>
+        <member name="T:MySelfLog.Api.Controllers.DataInputController">
+            <summary>
+            DataInput controller
+            </summary>
+        </member>
+        <member name="M:MySelfLog.Api.Controllers.DataInputController.#ctor(Microsoft.Extensions.Logging.ILogger{MySelfLog.Api.Controllers.DataInputController},MySelfLog.Contracts.Api.IPayloadValidator,MySelfLog.Contracts.Api.IIdGenerator,Microsoft.Extensions.Configuration.IConfiguration,Finbuckle.MultiTenant.IMultiTenantStore{MySelfLog.Admin.Model.MySelfLogTenantInfo},MySelfLog.Contracts.Api.IMessageSenderFactory)">
+            <summary>
+            Build controller
+            </summary>
+            <param name="logger">logger</param>
+            <param name="config"></param>
+            <param name="store"></param>
+            <param name="messageSenderFactory"></param>
+        </member>
+        <member name="M:MySelfLog.Api.Controllers.DataInputController.#ctor(Microsoft.Extensions.Logging.ILogger{MySelfLog.Api.Controllers.DataInputController},Finbuckle.MultiTenant.IMultiTenantStore{MySelfLog.Admin.Model.MySelfLogTenantInfo},MySelfLog.Contracts.Api.IMessageSenderFactory)">
+            <summary>
+            Build controller
+            </summary>
+            <param name="logger">logger</param>
+            <param name="store"></param>
+        </member>
+        <member name="M:MySelfLog.Api.Controllers.DataInputController.Get(System.String)">
+            <summary>
+            Retrieves an item using the id.
+            </summary>
+            <remarks>
+            Optionally the item can be retrieved at a later date.
+            </remarks>
+            <response code="201">An insurance product has been successfully retrieved.</response>
+            <response code="400">Unable to retrieve the item.</response>
+            <response code="404">Unable to find an item with the given id.</response>
+            <response code="408">The request to the server timed out. Please try again later.</response>
+            <response code="500">Oops! Cannot retrieve the item at this time.</response>
+            <param name="id"></param>
+        </member>
+        <member name="M:MySelfLog.Api.Controllers.DataInputController.Create(MySelfLog.Contracts.CloudEventRequest)">
+            <summary>
+            Ingest message synchronously
+            </summary>
+            <remarks>
+            </remarks>
+            <response code="201">The message has been successfully ingested</response>
+            <response code="404">Unable to ingest the message</response>
+            <param name="request"></param>
+        </member>
+        <member name="T:MySelfLog.Api.Services.IResourceElements">
+            <summary>
+            Given a resource, returns the constituents elements that make up the resource 
+            </summary>
+        </member>
+        <member name="M:MySelfLog.Api.Services.IResourceElements.GetResourceElements(System.String)">
+            <summary>
+            Splits the given resource into clientname, version and filename and returns 
+            it as a tuple
+            </summary>
+            <param name="uri">Format is: client/version/file.json</param>
+            <returns>a tuple containing: (clientname) </returns>
+        </member>
+        <member name="T:MySelfLog.Api.Services.MessageSenderFactory">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:MySelfLog.Api.Services.MessageSenderFactory.#ctor(Microsoft.Extensions.Logging.ILogger{MySelfLog.Api.Services.MessageSenderFactory},Finbuckle.MultiTenant.IMultiTenantStore{MySelfLog.Admin.Model.MySelfLogTenantInfo})">
+            <summary>
+            
+            </summary>
+            <param name="logger"></param>
+            <param name="store"></param>
+        </member>
+        <member name="M:MySelfLog.Api.Services.MessageSenderFactory.Build(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="source"></param>
+            <returns></returns>
+            <exception cref="T:System.NotImplementedException"></exception>
+        </member>
+        <member name="T:MySelfLog.Api.Services.MessageSenderInMemory">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:MySelfLog.Api.Services.MessageSenderInMemory.SendAsync(MySelfLog.Contracts.CloudEventRequest[])">
+            <summary>
+            
+            </summary>
+            <param name="requests"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MySelfLog.Api.Services.MessageSenderInMemory.SendAsync(MySelfLog.Contracts.CloudEventRequest)">
+            <summary>
+            
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MySelfLog.Api.Services.ResourceElements.GetResourceElements(System.String)">
+            <summary>
+            Given a uri, returns the client, version and filename
+            </summary>
+            <param name="uriLcase"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MySelfLog.Api.Services.SchemaProvider.GetSchema(System.String,System.String)">
+            <summary>
+            Returns the schema for the given client and version
+            throws an exception if the file is not found
+            </summary>
+            <param name="clientName"></param>
+            <param name="version"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

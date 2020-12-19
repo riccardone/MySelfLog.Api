@@ -1,4 +1,0 @@
-apiVersion: v1
-description: Myselflog.Api is the interface to log health values and retrieve them back 
-name: api
-version: v0.1.0
