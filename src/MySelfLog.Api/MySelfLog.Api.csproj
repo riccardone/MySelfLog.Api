@@ -4,7 +4,7 @@
 		<TargetFramework>net5.0</TargetFramework>
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 		<UserSecretsId>d55604a1-25da-4b79-b214-5631684c9094</UserSecretsId>
-    <StartupObject>MySelfLog.Api.Program</StartupObject>
+		<StartupObject>MySelfLog.Api.Program</StartupObject>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
