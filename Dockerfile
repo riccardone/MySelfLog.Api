@@ -16,7 +16,7 @@ RUN echo 'running COPY . .'
 COPY . .
 WORKDIR "/src/MySelfLog.Api"
 RUN echo 'running RUN dotnet build "MySelfLog.Api.csproj" -c Release -o /app/build'
-RUN dotnet build "MySelfLog.Api.csproj" -c Release -o /app/build /p:StartupObject=MySelfLog.Api.Program
+RUN dotnet build "MySelfLog.Api.csproj" -c Release -o /app/build 
 
 RUN echo 'running RUN dotnet publish "MySelfLog.Api.csproj" -c Release -o /app/publish'
 FROM build AS publish
