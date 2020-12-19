@@ -1,6 +1,6 @@
 {
     "type": "LogTerapy",
-    "source": "myselflog",
+    "source": "acme",
     "id": "53d3f209-6613-4572-867d-66093730f223",
     "time": "2020-12-12T12:31:51.641Z",
     "dataContentType": "application/json",
@@ -13,4 +13,4 @@
         "Calories": 300,
         "Comment": ""
     }
-  }
+}
