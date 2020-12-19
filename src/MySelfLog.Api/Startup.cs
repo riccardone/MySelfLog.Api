@@ -160,8 +160,8 @@ namespace MySelfLog.Api
             {
                 endpoints.MapControllers();
                 endpoints.MapControllerRoute("default", "{__tenant__=}/{controller=}/{action=}");
+                endpoints.MapHealthChecks("/health");
             });
-            app.UseHealthChecks("/health");
         }
     }
 }
