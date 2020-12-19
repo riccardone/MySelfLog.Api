@@ -11,7 +11,7 @@ COPY ["src/MySelfLog.Contracts/MySelfLog.Contracts.csproj", "MySelfLog.Contracts
 COPY ["src/MySelfLog.MessageSender.EventStore/MySelfLog.MessageSender.EventStore.csproj", "MySelfLog.MessageSender.EventStore/"]
 COPY ["src/MySelfLog.Contracts.Api/MySelfLog.Contracts.Api.csproj", "MySelfLog.Contracts.Api/"]
 COPY ["src/MySelfLog.Admin.Model/MySelfLog.Admin.Model.csproj", "MySelfLog.Admin.Model/"]
-RUN dotnet restore "src/MySelfLog.Api/MySelfLog.Api.csproj"
+RUN dotnet restore "MySelfLog.Api/MySelfLog.Api.csproj"
 COPY . .
 WORKDIR "/src/MySelfLog.Api"
 RUN dotnet build "MySelfLog.Api.csproj" -c Release -o /app/build
