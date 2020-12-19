@@ -14,7 +14,7 @@ COPY ["src/MySelfLog.Admin.Model/MySelfLog.Admin.Model.csproj", "MySelfLog.Admin
 RUN dotnet restore "MySelfLog.Api/MySelfLog.Api.csproj"
 RUN echo 'running COPY . .'
 COPY . .
-WORKDIR "/src/MySelfLog.Api"
+WORKDIR "/MySelfLog.Api"
 RUN echo 'running RUN dotnet build "MySelfLog.Api.csproj" -c Release -o /app/build'
 RUN dotnet build "MySelfLog.Api.csproj" -c Release -o /app/build
 
