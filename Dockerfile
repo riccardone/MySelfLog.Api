@@ -12,13 +12,17 @@ COPY ["src/MySelfLog.MessageSender.EventStore/MySelfLog.MessageSender.EventStore
 COPY ["src/MySelfLog.Contracts.Api/MySelfLog.Contracts.Api.csproj", "MySelfLog.Contracts.Api/"]
 COPY ["src/MySelfLog.Admin.Model/MySelfLog.Admin.Model.csproj", "MySelfLog.Admin.Model/"]
 RUN dotnet restore "MySelfLog.Api/MySelfLog.Api.csproj"
+RUN echo 'running COPY . .'
 COPY . .
 WORKDIR "/src/MySelfLog.Api"
+RUN echo 'running RUN dotnet build "MySelfLog.Api.csproj" -c Release -o /app/build'
 RUN dotnet build "MySelfLog.Api.csproj" -c Release -o /app/build
 
+RUN echo 'running RUN dotnet publish "MySelfLog.Api.csproj" -c Release -o /app/publish'
 FROM build AS publish
 RUN dotnet publish "MySelfLog.Api.csproj" -c Release -o /app/publish
 
+RUN echo 'running final'
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
