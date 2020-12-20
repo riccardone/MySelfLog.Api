@@ -58,7 +58,7 @@ namespace MySelfLog.Api
                     logging.ClearProviders();
                 })
                 .UseNLog()
-                .UseUrls("http://0.0.0.0:5000", "https://0.0.0.0:5001")
+                .UseUrls("http://0.0.0.0:5000") //, "https://0.0.0.0:5001")
                 .UseStartup<Startup>();
     }
 }
