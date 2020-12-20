@@ -30,12 +30,6 @@ namespace MySelfLog.Api.Middleware
                 await _next(context);
                 return;
             }
-            if (!context.Request.Headers.TryGetValue(APIKEYNAME, out var extractedApiKey))
-            {
-                context.Response.StatusCode = 401;
-                await context.Response.WriteAsync("Api Key was not provided");
-                return;
-            }
 
             string jsonString;
             context.Request.EnableBuffering();
@@ -57,6 +51,7 @@ namespace MySelfLog.Api.Middleware
                 await context.Response.WriteAsync("invalid request");
                 return;
             }
+
             var tenant = await _store.TryGetByIdentifierAsync(cloudEvent.Source.ToString());
             if (tenant == null)
             {
@@ -66,6 +61,19 @@ namespace MySelfLog.Api.Middleware
             }
 
             var apiKey = tenant.ApiKey;
+
+            if (string.IsNullOrWhiteSpace(apiKey))
+            {
+                await _next(context);
+                return;
+            }
+
+            if (!context.Request.Headers.TryGetValue(APIKEYNAME, out var extractedApiKey))
+            {
+                context.Response.StatusCode = 401;
+                await context.Response.WriteAsync("Api Key was not provided");
+                return;
+            }
 
             if (!apiKey.Equals(extractedApiKey))
             {
