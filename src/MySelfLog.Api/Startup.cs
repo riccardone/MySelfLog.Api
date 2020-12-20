@@ -60,14 +60,14 @@ namespace MySelfLog.Api
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MySelfLog-Api", Version = "v1" });
 
-                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-                {
-                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
-                    Name = "Authorization",
-                    In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.ApiKey,
-                    Scheme = "Bearer"
-                });
+                //c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                //{
+                //    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                //    Name = "Authorization",
+                //    In = ParameterLocation.Header,
+                //    Type = SecuritySchemeType.ApiKey,
+                //    Scheme = "Bearer"
+                //});
                 c.AddSecurityDefinition(ApiKeyMiddleware.APIKEYNAME, new OpenApiSecurityScheme
                 {
                     Description = "Api key needed to access the endpoints. X-Api-Key: My_API_Key",
@@ -92,20 +92,20 @@ namespace MySelfLog.Api
                         new string[] {}
                     }
                 });
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference {
-                                Type = ReferenceType.SecurityScheme,
-                                Id = "Bearer"
-                            }
-                        }, new List<string>() }
-                });
+                //c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                //{
+                //    {
+                //        new OpenApiSecurityScheme
+                //        {
+                //            Reference = new OpenApiReference {
+                //                Type = ReferenceType.SecurityScheme,
+                //                Id = "Bearer"
+                //            }
+                //        }, new List<string>() }
+                //});
 
                 c.OperationFilter<ApiVersionHeaderParameterOperationFilter>();
-                c.OperationFilter<AuthorizationHeaderParameterOperationFilter>();
+                //c.OperationFilter<AuthorizationHeaderParameterOperationFilter>();
 
                 //Use method name as operationId
                 c.CustomOperationIds(apiDesc => apiDesc.TryGetMethodInfo(out MethodInfo methodInfo) ? methodInfo.Name : null);
