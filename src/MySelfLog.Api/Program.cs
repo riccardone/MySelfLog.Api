@@ -47,7 +47,6 @@ namespace MySelfLog.Api
                 .ConfigureAppConfiguration(c =>
                 {
                     c.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
-                    c.AddJsonFile("config/myselflog-api-multi-tenancy-config-map.json", optional: true, reloadOnChange: true); // for config maps loaded into AKS
                     c.AddEnvironmentVariables();
 
                     if (!string.IsNullOrWhiteSpace(env) && env == "Development")
