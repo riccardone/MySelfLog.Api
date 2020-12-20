@@ -39,6 +39,12 @@ namespace MySelfLog.Api.Middleware
                 context.Request.Body.Seek(0, SeekOrigin.Begin);
             }
 
+            if (string.IsNullOrWhiteSpace(jsonString))
+            {
+                await _next(context);
+                return;
+            }
+
             var options = new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true,
