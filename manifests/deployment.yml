@@ -1,0 +1,19 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: "rdnapps-b347"
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: "rdnapps-b347"
+  template:
+    metadata:
+      labels:
+        app: "rdnapps-b347"
+    spec:
+      containers:
+        - name: "rdnapps-b347"
+          image: "rdnapps.azurecr.io/rdnapps"
+          ports:
+          - containerPort: 5001
