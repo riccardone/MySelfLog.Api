@@ -49,17 +49,6 @@
             <response code="404">Unable to ingest the message</response>
             <param name="request"></param>
         </member>
-        <member name="T:MySelfLog.Api.Program">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="M:MySelfLog.Api.Program.Main(System.String[])">
-            <summary>
-            
-            </summary>
-            <param name="args"></param>
-        </member>
         <member name="T:MySelfLog.Api.Services.IResourceElements">
             <summary>
             Given a resource, returns the constituents elements that make up the resource 
