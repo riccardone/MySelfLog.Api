@@ -4,6 +4,7 @@
 		<TargetFramework>net5.0</TargetFramework>
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 		<UserSecretsId>d55604a1-25da-4b79-b214-5631684c9094</UserSecretsId>
+		<ApplicationInsightsResourceId>/subscriptions/d5d7b26a-afeb-47f9-abda-6331b195d40e/resourceGroups/myselflog/providers/microsoft.insights/components/MySelfLogApi</ApplicationInsightsResourceId>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
