@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MySelfLog.Contracts.Api", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MySelfLog.MessageSender.EventStore", "MySelfLog.MessageSender.EventStore\MySelfLog.MessageSender.EventStore.csproj", "{EB13B970-4201-4EA5-95BE-529EBEE17666}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MySelfLog.Api", "MySelfLog.Api\MySelfLog.Api.csproj", "{0B433117-7AE5-4DAD-9331-DB9AF0A3C803}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MySelfLog.Api", "MySelfLog.Api\MySelfLog.Api.csproj", "{0B433117-7AE5-4DAD-9331-DB9AF0A3C803}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MySelfLog.MessageSender.AzureServiceBus", "MySelfLog.MessageSender.AzureServiceBus\MySelfLog.MessageSender.AzureServiceBus.csproj", "{32414849-7DF8-454C-B80E-226F00857B99}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{0B433117-7AE5-4DAD-9331-DB9AF0A3C803}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0B433117-7AE5-4DAD-9331-DB9AF0A3C803}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0B433117-7AE5-4DAD-9331-DB9AF0A3C803}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32414849-7DF8-454C-B80E-226F00857B99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32414849-7DF8-454C-B80E-226F00857B99}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32414849-7DF8-454C-B80E-226F00857B99}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32414849-7DF8-454C-B80E-226F00857B99}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

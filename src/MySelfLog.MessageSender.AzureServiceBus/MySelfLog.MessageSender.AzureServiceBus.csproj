@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Azure.ServiceBus" Version="5.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MySelfLog.Contracts.Api\MySelfLog.Contracts.Api.csproj" />
+    <ProjectReference Include="..\MySelfLog.Contracts\MySelfLog.Contracts.csproj" />
+  </ItemGroup>
+
+</Project>
