@@ -18,13 +18,6 @@
             <param name="store"></param>
             <param name="messageSenderFactory"></param>
         </member>
-        <member name="M:MySelfLog.Api.Controllers.DataInputController.#ctor(Microsoft.Extensions.Logging.ILogger{MySelfLog.Api.Controllers.DataInputController},Finbuckle.MultiTenant.IMultiTenantStore{MySelfLog.Admin.Model.MySelfLogTenantInfo},MySelfLog.Contracts.Api.IMessageSenderFactory)">
-            <summary>
-            Build controller
-            </summary>
-            <param name="logger">logger</param>
-            <param name="store"></param>
-        </member>
         <member name="M:MySelfLog.Api.Controllers.DataInputController.Get(System.String)">
             <summary>
             Retrieves an item using the id.
