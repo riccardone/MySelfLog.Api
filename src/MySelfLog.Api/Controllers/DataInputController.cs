@@ -50,18 +50,6 @@ namespace MySelfLog.Api.Controllers
         }
 
         /// <summary>
-        /// Build controller
-        /// </summary>
-        /// <param name="logger">logger</param>
-        /// <param name="store"></param>
-        public DataInputController(ILogger<DataInputController> logger, IMultiTenantStore<MySelfLogTenantInfo> store, IMessageSenderFactory messageSenderFactory)
-        {
-            _logger = logger;
-            _store = store;
-            _messageSenderFactory = messageSenderFactory;
-        }
-
-        /// <summary>
         /// Retrieves an item using the id.
         /// </summary>
         /// <remarks>
@@ -80,7 +68,7 @@ namespace MySelfLog.Api.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<JObject>> Get(string id)
         {
-            throw new NotImplementedException();
+            return NotFound();
         }
 
         /// <summary>
