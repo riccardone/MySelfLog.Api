@@ -11,6 +11,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.1" NoWarn="NU1605" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="5.0.1" NoWarn="NU1605" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="5.0.1" />
     <PackageReference Include="Microsoft.Json.Schema" Version="1.1.2" />
     <PackageReference Include="Microsoft.Json.Schema.Validation" Version="1.1.2" />
     <PackageReference Include="Newtonsoft.Json.Schema" Version="3.0.13" />
