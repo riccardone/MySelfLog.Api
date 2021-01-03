@@ -17,7 +17,6 @@ namespace MySelfLog.Api.Middleware
                 {
                     context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                     context.Response.ContentType = "application/json";
-                    logger.LogError("Something went wrong");
 
                     var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
                     if (contextFeature != null)
