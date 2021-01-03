@@ -1,4 +1,4 @@
-![CI/CD MySelfLog](https://github.com/riccardone/MySelfLog.Api/workflows/CI/CD%20MySelfLog/badge.svg)
+![CI/CD MySelfLog-Api](https://github.com/riccardone/MySelfLog.Api/workflows/CI/CD%20MySelfLog-Api/badge.svg)
 
 # Introduction 
 This C# .Net WebApi solution is for exposing a single endpoint able to receive any message from any configured tenant conforming the CloudEvent schema. Messages are validated and sent to an internal message bus.   

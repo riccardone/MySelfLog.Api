@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: CI/CD MySelfLog
+name: CI/CD MySelfLog-Api
 
 on:
   push:
@@ -10,7 +10,7 @@ on:
 
 jobs:
   build-and-deploy:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@master
@@ -31,5 +31,5 @@ jobs:
       with:
         app-name: 'myselflogapi'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_6a6007a280104357b19ca27533ed69aa }}
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_3c5f4cb1550346b89a8ed9881d346852 }}
         package: ${{env.DOTNET_ROOT}}/myapp 
