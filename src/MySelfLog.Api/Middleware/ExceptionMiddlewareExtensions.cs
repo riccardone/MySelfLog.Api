@@ -21,12 +21,13 @@ namespace MySelfLog.Api.Middleware
                     var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
                     if (contextFeature != null)
                     {
-                        logger.LogError($"Something went wrong: {contextFeature.Error.GetBaseException().Message}");
+                        var message = $"Something went wrong: {contextFeature.Error.GetBaseException().Message}";
+                        logger.LogError(message);
 
                         await context.Response.WriteAsync(new ErrorDetails()
                         {
                             StatusCode = context.Response.StatusCode,
-                            Message = "Internal Server Error"
+                            Message = message
                         }.ToString());
                     }
                 });
