@@ -1,102 +1,102 @@
-﻿using System;
-using System.IO;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
-using Finbuckle.MultiTenant;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using MySelfLog.Admin.Model;
-using MySelfLog.Contracts;
+﻿//using System;
+//using System.IO;
+//using System.Text;
+//using System.Text.Json;
+//using System.Threading.Tasks;
+//using Finbuckle.MultiTenant;
+//using Microsoft.AspNetCore.Http;
+//using Microsoft.Extensions.Configuration;
+//using Microsoft.Extensions.DependencyInjection;
+//using MySelfLog.Admin.Model;
+//using MySelfLog.Contracts;
 
-namespace MySelfLog.Api.Middleware
-{
-    public class ApiKeyMiddleware
-    {
-        private readonly RequestDelegate _next;
-        private readonly IMultiTenantStore<MySelfLogTenantInfo> _store;
-        public const string APIKEYNAME = "ApiKey";
+//namespace MySelfLog.Api.Middleware
+//{
+//    public class ApiKeyMiddleware
+//    {
+//        private readonly RequestDelegate _next;
+//        private readonly IMultiTenantStore<MySelfLogTenantInfo> _store;
+//        public const string APIKEYNAME = "ApiKey";
 
-        public ApiKeyMiddleware(RequestDelegate next, IMultiTenantStore<MySelfLogTenantInfo> store)
-        {
-            _next = next;
-            _store = store;
-        }
-        public async Task InvokeAsync(HttpContext context)
-        {
-            try
-            {
-                if (context.Request.Path.Equals("/health"))
-                {
-                    await _next(context);
-                    return;
-                }
+//        public ApiKeyMiddleware(RequestDelegate next, IMultiTenantStore<MySelfLogTenantInfo> store)
+//        {
+//            _next = next;
+//            _store = store;
+//        }
+//        public async Task InvokeAsync(HttpContext context)
+//        {
+//            try
+//            {
+//                if (context.Request.Path.Equals("/health"))
+//                {
+//                    await _next(context);
+//                    return;
+//                }
 
-                string jsonString;
-                context.Request.EnableBuffering();
-                using (var reader = new StreamReader(context.Request.Body, Encoding.UTF8, false, 1024, true))
-                {
-                    jsonString = await reader.ReadToEndAsync();
-                    context.Request.Body.Seek(0, SeekOrigin.Begin);
-                }
+//                string jsonString;
+//                context.Request.EnableBuffering();
+//                using (var reader = new StreamReader(context.Request.Body, Encoding.UTF8, false, 1024, true))
+//                {
+//                    jsonString = await reader.ReadToEndAsync();
+//                    context.Request.Body.Seek(0, SeekOrigin.Begin);
+//                }
 
-                if (string.IsNullOrWhiteSpace(jsonString))
-                {
-                    await _next(context);
-                    return;
-                }
+//                if (string.IsNullOrWhiteSpace(jsonString))
+//                {
+//                    await _next(context);
+//                    return;
+//                }
 
-                var options = new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true,
-                };
+//                var options = new JsonSerializerOptions
+//                {
+//                    PropertyNameCaseInsensitive = true,
+//                };
 
-                var cloudEvent = JsonSerializer.Deserialize<CloudEventRequest>(jsonString, options);
-                if (cloudEvent == null)
-                {
-                    context.Response.StatusCode = 401;
-                    await context.Response.WriteAsync("invalid request");
-                    return;
-                }
+//                var cloudEvent = JsonSerializer.Deserialize<CloudEventRequest>(jsonString, options);
+//                if (cloudEvent == null)
+//                {
+//                    context.Response.StatusCode = 401;
+//                    await context.Response.WriteAsync("invalid request");
+//                    return;
+//                }
 
-                var tenant = await _store.TryGetByIdentifierAsync(cloudEvent.Source.ToString());
-                if (tenant == null)
-                {
-                    context.Response.StatusCode = 401;
-                    await context.Response.WriteAsync("tenant not found");
-                    return;
-                }
+//                var tenant = await _store.TryGetByIdentifierAsync(cloudEvent.Source.ToString());
+//                if (tenant == null)
+//                {
+//                    context.Response.StatusCode = 401;
+//                    await context.Response.WriteAsync("tenant not found");
+//                    return;
+//                }
 
-                var apiKey = tenant.ApiKey;
+//                var apiKey = tenant.ApiKey;
 
-                if (string.IsNullOrWhiteSpace(apiKey))
-                {
-                    await _next(context);
-                    return;
-                }
+//                if (string.IsNullOrWhiteSpace(apiKey))
+//                {
+//                    await _next(context);
+//                    return;
+//                }
 
-                if (!context.Request.Headers.TryGetValue(APIKEYNAME, out var extractedApiKey))
-                {
-                    context.Response.StatusCode = 401;
-                    await context.Response.WriteAsync("Api Key was not provided");
-                    return;
-                }
+//                if (!context.Request.Headers.TryGetValue(APIKEYNAME, out var extractedApiKey))
+//                {
+//                    context.Response.StatusCode = 401;
+//                    await context.Response.WriteAsync("Api Key was not provided");
+//                    return;
+//                }
 
-                if (!apiKey.Equals(extractedApiKey))
-                {
-                    context.Response.StatusCode = 401;
-                    await context.Response.WriteAsync("Unauthorized client");
-                    return;
-                }
+//                if (!apiKey.Equals(extractedApiKey))
+//                {
+//                    context.Response.StatusCode = 401;
+//                    await context.Response.WriteAsync("Unauthorized client");
+//                    return;
+//                }
 
-                await _next(context);
-            }
-            catch (Exception e)
-            {
-                context.Response.StatusCode = 400;
-                await context.Response.WriteAsync(e.GetBaseException().Message);
-            }
-        }
-    }
-}
+//                await _next(context);
+//            }
+//            catch (Exception e)
+//            {
+//                context.Response.StatusCode = 400;
+//                await context.Response.WriteAsync(e.GetBaseException().Message);
+//            }
+//        }
+//    }
+//}
