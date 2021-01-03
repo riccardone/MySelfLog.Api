@@ -43,7 +43,8 @@ namespace MySelfLog.MessageSender.EventStore
         {
             using var conn = _connectionBuilder.Build();
             conn.ConnectAsync().Wait();
-            await conn.AppendToStreamAsync($"datainput-{request.Source.Host}-{DateTime.UtcNow.Year}-{DateTime.UtcNow.Month}",
+            var streamName = request.Source.IsAbsoluteUri ? request.Source.Host : request.Source.ToString();
+            await conn.AppendToStreamAsync($"datainput-{streamName}-{DateTime.UtcNow.Year}-{DateTime.UtcNow.Month}",
                 ExpectedVersion.Any, CreateEventData(request, request.Type));
         }
 
