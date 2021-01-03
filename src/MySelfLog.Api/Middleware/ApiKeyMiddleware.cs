@@ -25,70 +25,78 @@ namespace MySelfLog.Api.Middleware
         }
         public async Task InvokeAsync(HttpContext context)
         {
-            if (context.Request.Path.Equals("/health"))
+            try
             {
+                if (context.Request.Path.Equals("/health"))
+                {
+                    await _next(context);
+                    return;
+                }
+
+                string jsonString;
+                context.Request.EnableBuffering();
+                using (var reader = new StreamReader(context.Request.Body, Encoding.UTF8, false, 1024, true))
+                {
+                    jsonString = await reader.ReadToEndAsync();
+                    context.Request.Body.Seek(0, SeekOrigin.Begin);
+                }
+
+                if (string.IsNullOrWhiteSpace(jsonString))
+                {
+                    await _next(context);
+                    return;
+                }
+
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true,
+                };
+
+                var cloudEvent = JsonSerializer.Deserialize<CloudEventRequest>(jsonString, options);
+                if (cloudEvent == null)
+                {
+                    context.Response.StatusCode = 401;
+                    await context.Response.WriteAsync("invalid request");
+                    return;
+                }
+
+                var tenant = await _store.TryGetByIdentifierAsync(cloudEvent.Source.ToString());
+                if (tenant == null)
+                {
+                    context.Response.StatusCode = 401;
+                    await context.Response.WriteAsync("tenant not found");
+                    return;
+                }
+
+                var apiKey = tenant.ApiKey;
+
+                if (string.IsNullOrWhiteSpace(apiKey))
+                {
+                    await _next(context);
+                    return;
+                }
+
+                if (!context.Request.Headers.TryGetValue(APIKEYNAME, out var extractedApiKey))
+                {
+                    context.Response.StatusCode = 401;
+                    await context.Response.WriteAsync("Api Key was not provided");
+                    return;
+                }
+
+                if (!apiKey.Equals(extractedApiKey))
+                {
+                    context.Response.StatusCode = 401;
+                    await context.Response.WriteAsync("Unauthorized client");
+                    return;
+                }
+
                 await _next(context);
-                return;
             }
-
-            string jsonString;
-            context.Request.EnableBuffering();
-            using (var reader = new StreamReader(context.Request.Body, Encoding.UTF8, false, 1024, true))
+            catch (Exception e)
             {
-                jsonString = await reader.ReadToEndAsync();
-                context.Request.Body.Seek(0, SeekOrigin.Begin);
+                context.Response.StatusCode = 400;
+                await context.Response.WriteAsync(e.GetBaseException().Message);
             }
-
-            if (string.IsNullOrWhiteSpace(jsonString))
-            {
-                await _next(context);
-                return;
-            }
-
-            var options = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true,
-            };
-
-            var cloudEvent = JsonSerializer.Deserialize<CloudEventRequest>(jsonString, options);
-            if (cloudEvent == null)
-            {
-                context.Response.StatusCode = 401;
-                await context.Response.WriteAsync("invalid request");
-                return;
-            }
-
-            var tenant = await _store.TryGetByIdentifierAsync(cloudEvent.Source.ToString());
-            if (tenant == null)
-            {
-                context.Response.StatusCode = 401;
-                await context.Response.WriteAsync("tenant not found");
-                return;
-            }
-
-            var apiKey = tenant.ApiKey;
-
-            if (string.IsNullOrWhiteSpace(apiKey))
-            {
-                await _next(context);
-                return;
-            }
-
-            if (!context.Request.Headers.TryGetValue(APIKEYNAME, out var extractedApiKey))
-            {
-                context.Response.StatusCode = 401;
-                await context.Response.WriteAsync("Api Key was not provided");
-                return;
-            }
-
-            if (!apiKey.Equals(extractedApiKey))
-            {
-                context.Response.StatusCode = 401;
-                await context.Response.WriteAsync("Unauthorized client");
-                return;
-            }
-
-            await _next(context);
         }
     }
 }
