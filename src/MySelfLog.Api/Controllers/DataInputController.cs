@@ -86,6 +86,8 @@ namespace MySelfLog.Api.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult Create([FromBody][Required] CloudEventRequest request)
         {
+            _logger.LogInformation("DataInput->Create is called");
+
             if (!request.DataContentType.Equals("application/json"))
                 return BadRequest("DataContentType must be: 'application/json'");
 
