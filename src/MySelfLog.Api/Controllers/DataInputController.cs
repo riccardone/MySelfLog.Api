@@ -114,13 +114,13 @@ namespace MySelfLog.Api.Controllers
             badRequest = null;
             if (request.DataSchema != null && request.DataSchema.IsWellFormedOriginalString())
             {
-                if (request.Data == null)
-                {
-                    {
-                        badRequest = BadRequest("Data field is empty");
-                        return false;
-                    }
-                }
+                //if (request.Data == null)
+                //{
+                //    {
+                //        badRequest = BadRequest("Data field is empty");
+                //        return false;
+                //    }
+                //}
 
                 var validationResult = _payloadValidator.Validate(request.DataSchema.ToString(), request.Data.ToString());
 
