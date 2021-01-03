@@ -14,8 +14,6 @@ namespace MySelfLog.MessageSender.EventStore
     public class MessageSenderToEventStore : IMessageSender
     {
         private readonly IConnectionBuilder _connectionBuilder;
-        private readonly string _streamName = $"data-input-{DateTime.UtcNow.Year}-{DateTime.UtcNow.Month}";
-        private readonly string _eventType = "CloudEventReceived";
 
         /// <summary>
         /// Send messages to Azure Service bus queue
@@ -45,7 +43,8 @@ namespace MySelfLog.MessageSender.EventStore
         {
             using var conn = _connectionBuilder.Build();
             conn.ConnectAsync().Wait();
-            await conn.AppendToStreamAsync(_streamName, ExpectedVersion.Any, CreateEventData(request, _eventType));
+            await conn.AppendToStreamAsync($"datainput-{request.Source.Host}-{DateTime.UtcNow.Year}-{DateTime.UtcNow.Month}",
+                ExpectedVersion.Any, CreateEventData(request, request.Type));
         }
 
         private EventData CreateEventData(object obj, string eventType)
