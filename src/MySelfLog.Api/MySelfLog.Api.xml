@@ -9,28 +9,15 @@
             DataInput controller
             </summary>
         </member>
-        <member name="M:MySelfLog.Api.Controllers.DataInputController.#ctor(Microsoft.Extensions.Logging.ILogger{MySelfLog.Api.Controllers.DataInputController},MySelfLog.Contracts.Api.IPayloadValidator,MySelfLog.Contracts.Api.IIdGenerator,Microsoft.Extensions.Configuration.IConfiguration,Finbuckle.MultiTenant.IMultiTenantStore{MySelfLog.Admin.Model.MySelfLogTenantInfo},MySelfLog.Contracts.Api.IMessageSenderFactory)">
+        <member name="M:MySelfLog.Api.Controllers.DataInputController.#ctor(Microsoft.Extensions.Logging.ILogger{MySelfLog.Api.Controllers.DataInputController},MySelfLog.Contracts.Api.IPayloadValidator,MySelfLog.Contracts.Api.IIdGenerator,Finbuckle.MultiTenant.IMultiTenantStore{MySelfLog.Admin.Model.MySelfLogTenantInfo},MySelfLog.Contracts.Api.IMessageSenderFactory)">
             <summary>
             Build controller
             </summary>
             <param name="logger">logger</param>
-            <param name="config"></param>
+            <param name="idGenerator"></param>
             <param name="store"></param>
             <param name="messageSenderFactory"></param>
-        </member>
-        <member name="M:MySelfLog.Api.Controllers.DataInputController.Get(System.String)">
-            <summary>
-            Retrieves an item using the id.
-            </summary>
-            <remarks>
-            Optionally the item can be retrieved at a later date.
-            </remarks>
-            <response code="201">An insurance product has been successfully retrieved.</response>
-            <response code="400">Unable to retrieve the item.</response>
-            <response code="404">Unable to find an item with the given id.</response>
-            <response code="408">The request to the server timed out. Please try again later.</response>
-            <response code="500">Oops! Cannot retrieve the item at this time.</response>
-            <param name="id"></param>
+            <param name="payloadValidator"></param>
         </member>
         <member name="M:MySelfLog.Api.Controllers.DataInputController.Create(MySelfLog.Contracts.CloudEventRequest)">
             <summary>
