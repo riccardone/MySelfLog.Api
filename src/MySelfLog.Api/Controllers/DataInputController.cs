@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Finbuckle.MultiTenant;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MySelfLog.Admin.Model;
 using MySelfLog.Api.Services;
@@ -35,12 +34,13 @@ namespace MySelfLog.Api.Controllers
         /// Build controller
         /// </summary>
         /// <param name="logger">logger</param>
-        /// <param name="config"></param>
+        /// <param name="idGenerator"></param>
         /// <param name="store"></param>
         /// <param name="messageSenderFactory"></param>
-        public DataInputController(ILogger<DataInputController> logger, IPayloadValidator payloadValidator, IIdGenerator idGenerator,
-            IConfiguration config, IMultiTenantStore<MySelfLogTenantInfo> store,
-                                   IMessageSenderFactory messageSenderFactory)
+        /// <param name="payloadValidator"></param>
+        public DataInputController(ILogger<DataInputController> logger, IPayloadValidator payloadValidator,
+            IIdGenerator idGenerator, IMultiTenantStore<MySelfLogTenantInfo> store,
+            IMessageSenderFactory messageSenderFactory)
         {
             _logger = logger;
             _payloadValidator = payloadValidator;
@@ -49,27 +49,27 @@ namespace MySelfLog.Api.Controllers
             _messageSenderFactory = messageSenderFactory;
         }
 
-        /// <summary>
-        /// Retrieves an item using the id.
-        /// </summary>
-        /// <remarks>
-        /// Optionally the item can be retrieved at a later date.
-        /// </remarks>
-        /// <response code="201">An insurance product has been successfully retrieved.</response>
-        /// <response code="400">Unable to retrieve the item.</response>
-        /// <response code="404">Unable to find an item with the given id.</response>
-        /// <response code="408">The request to the server timed out. Please try again later.</response>
-        /// <response code="500">Oops! Cannot retrieve the item at this time.</response>
-        /// <param name="id"></param>
-        [Route("{id}")]
-        [HttpGet]
-        [ProducesResponseType(typeof(JObject), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<JObject>> Get(string id)
-        {
-            return NotFound();
-        }
+        ///// <summary>
+        ///// Retrieves an item using the id.
+        ///// </summary>
+        ///// <remarks>
+        ///// Optionally the item can be retrieved at a later date.
+        ///// </remarks>
+        ///// <response code="201">An insurance product has been successfully retrieved.</response>
+        ///// <response code="400">Unable to retrieve the item.</response>
+        ///// <response code="404">Unable to find an item with the given id.</response>
+        ///// <response code="408">The request to the server timed out. Please try again later.</response>
+        ///// <response code="500">Oops! Cannot retrieve the item at this time.</response>
+        ///// <param name="id"></param>
+        //[Route("{id}")]
+        //[HttpGet]
+        //[ProducesResponseType(typeof(JObject), StatusCodes.Status200OK)]
+        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
+        //[ProducesResponseType(StatusCodes.Status404NotFound)]
+        //public async Task<ActionResult<JObject>> Get(string id)
+        //{
+        //    return  NotFound();
+        //}
 
         /// <summary>
         /// Ingest message synchronously
@@ -84,7 +84,7 @@ namespace MySelfLog.Api.Controllers
         [ProducesResponseType(typeof(CloudEventRequest), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult Create([FromBody][Required] CloudEventRequest request)
+        public async Task<IActionResult> Create([FromBody][Required] CloudEventRequest request)
         {
             _logger.LogInformation("DataInput->Create is called");
 
@@ -104,7 +104,7 @@ namespace MySelfLog.Api.Controllers
             EncryptMessageIfNeeded(request);
 
             var sender = _messageSenderFactory.Build(request.Source.ToString());
-            sender.SendAsync(request).Wait();
+            await sender.SendAsync(request);
 
             return Ok(new { CorrelationId = result });
         }
@@ -114,14 +114,6 @@ namespace MySelfLog.Api.Controllers
             badRequest = null;
             if (request.DataSchema != null && request.DataSchema.IsWellFormedOriginalString())
             {
-                //if (request.Data == null)
-                //{
-                //    {
-                //        badRequest = BadRequest("Data field is empty");
-                //        return false;
-                //    }
-                //}
-
                 var validationResult = _payloadValidator.Validate(request.DataSchema.ToString(), request.Data.ToString());
 
                 if (!validationResult.IsValid)
@@ -135,10 +127,8 @@ namespace MySelfLog.Api.Controllers
                         StringEscapeHandling = StringEscapeHandling.EscapeHtml
                     };
 
-                    {
-                        badRequest = BadRequest(JsonConvert.SerializeObject(new {Error = errors.Replace("'", "")}, settings));
-                        return false;
-                    }
+                    badRequest = BadRequest(JsonConvert.SerializeObject(new {Error = errors.Replace("'", "")}, settings));
+                    return false;
                 }
 
                 _logger.LogInformation(
